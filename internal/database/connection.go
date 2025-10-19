@@ -5,6 +5,7 @@ import (
 	"gorm.io/gorm"
 	"gorm.io/driver/postgres"
 	"github.com/Wilson1510/klampis-pim-go/internal/config"
+	"github.com/Wilson1510/klampis-pim-go/internal/models"
 )
 
 func NewConnection(config *config.DatabaseConfig) (*gorm.DB, error) {
@@ -32,4 +33,11 @@ func NewConnection(config *config.DatabaseConfig) (*gorm.DB, error) {
 	}
 
 	return db, nil
+}
+
+// AutoMigrate runs database migrations for all models
+func AutoMigrate(db *gorm.DB) error {
+	return db.AutoMigrate(
+		&models.User{},
+	)
 }

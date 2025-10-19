@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/Wilson1510/klampis-pim-go/internal/config"
 	"github.com/Wilson1510/klampis-pim-go/internal/database"
+	"github.com/Wilson1510/klampis-pim-go/internal/models"
 )
 
 func main() {
@@ -24,5 +25,12 @@ func main() {
 
 	defer sqlDB.Close()
 
+	// Run database migrations
+	err = database.AutoMigrate(db)
+	if err != nil {
+		panic(fmt.Sprintf("Failed to migrate database: %v", err))
+	}
+
 	fmt.Println("Database connected successfully")
+	fmt.Println("Database migration completed successfully")
 }
