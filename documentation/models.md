@@ -28,10 +28,6 @@ ERD structure:
 │ role            │
 │ created_at      │
 │ updated_at      │
-│ created_by      │
-│ updated_by      │
-│ is_active       │
-│ sequence        │
 └─────────────────┘
 
 ┌─────────────────┐    1:N    ┌─────────────────┐
