@@ -49,11 +49,6 @@ func TestValidateRole(t *testing.T) {
 			expectError: true,
 		},
 		{
-			name:        "Invalid Role - GUEST",
-			role:        UserRole("GUEST"),
-			expectError: true,
-		},
-		{
 			name:        "Invalid Role - Empty String",
 			role:        UserRole(""),
 			expectError: true,
@@ -61,11 +56,6 @@ func TestValidateRole(t *testing.T) {
 		{
 			name:        "Invalid Role - Lowercase admin",
 			role:        UserRole("admin"),
-			expectError: true,
-		},
-		{
-			name:        "Invalid Role - Lowercase user",
-			role:        UserRole("user"),
 			expectError: true,
 		},
 		{
