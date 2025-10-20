@@ -39,5 +39,8 @@ func NewConnection(config *config.DatabaseConfig) (*gorm.DB, error) {
 func AutoMigrate(db *gorm.DB) error {
 	return db.AutoMigrate(
 		&models.User{},
+		&models.Category{},
+		&models.Product{},
+		&models.Sku{},
 	)
 }
