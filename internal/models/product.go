@@ -17,6 +17,9 @@ type Product struct {
 	
 	// Relationship with SKUs
 	Skus []Sku `gorm:"foreignKey:ProductID" json:"skus,omitempty"`
+	
+	// Polymorphic relationship with Images
+	Images []Image `gorm:"polymorphic:Imageable" json:"images,omitempty"`
 }
 
 // BeforeCreate is a GORM hook that runs before creating a record
