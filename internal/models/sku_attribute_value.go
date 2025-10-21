@@ -77,10 +77,17 @@ func (sav *SkuAttributeValue) SetValue(value interface{}, tx *gorm.DB) error {
 // GetDisplayValue returns a formatted display value with UOM if applicable
 func (sav *SkuAttributeValue) GetDisplayValue(tx *gorm.DB) (string, error) {
 	var attribute Attribute
-	if err := tx.Preload("Attribute").First(&attribute, sav.AttributeID).Error; err != nil {
-		return "", fmt.Errorf("attribute not found: %w", err)
+	// Check if Attribute is already preloaded
+	if sav.Attribute != nil {
+		attribute = *sav.Attribute
+	} else {
+		// Fetch attribute if not preloaded
+		if err := tx.First(&attribute, sav.AttributeID).Error; err != nil {
+			return "", fmt.Errorf("attribute not found: %w", err)
+		}
 	}
 	
+	// Format display value with UOM if available
 	if attribute.UOM != "" {
 		return fmt.Sprintf("%s %s", sav.Value, attribute.UOM), nil
 	}

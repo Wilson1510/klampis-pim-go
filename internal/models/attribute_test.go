@@ -2,6 +2,7 @@ package models
 
 import (
 	"testing"
+	"time"
 )
 
 // TestAttributeDataTypeValidation tests data type validation
@@ -128,6 +129,7 @@ func TestAttributeParseValue(t *testing.T) {
 			name:        "Parse date ISO format",
 			attribute:   Attribute{DataType: DataTypeDate},
 			valueStr:    "2023-12-31",
+			expected:    time.Date(2023, 12, 31, 0, 0, 0, 0, time.UTC),
 			expectError: false,
 		},
 		{
