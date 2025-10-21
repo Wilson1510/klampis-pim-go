@@ -42,5 +42,7 @@ func AutoMigrate(db *gorm.DB) error {
 		&models.Category{},
 		&models.Product{},
 		&models.Sku{},
+		&models.Attribute{},
+		&models.SkuAttributeValue{},
 	)
 }

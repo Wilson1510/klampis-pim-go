@@ -79,9 +79,9 @@ ERD structure:
 │ created_at      │           │ updated_at      │           │ price           │
 │ updated_at      │           │ created_by (FK) │           │ product_id (FK) │
 │ created_by (FK) │           │ updated_by (FK) │           │ created_at      │
-│ updated_by (FK) │           │ is_active       │           │ updated_at      │
-│ is_active       │           │ sequence        │           │ created_by (FK) │
-│ sequence        │           └─────────────────┘           │ updated_by (FK) │
+│ updated_by (FK) │           │ sequence        │           │ updated_at      │
+│ is_active       │           └─────────────────┘           │ created_by (FK) │
+│ sequence        │                                         │ updated_by (FK) │
 └─────────────────┘                                         │ is_active       │
                                                             │ sequence        │
                                                             └─────────────────┘
