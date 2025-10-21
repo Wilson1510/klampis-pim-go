@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"strconv"
 	"time"
+
+	"gorm.io/gorm"
 )
 
 // DataType constants for attribute data types
@@ -42,12 +44,12 @@ func (a *Attribute) ValidateDataType() error {
 }
 
 // BeforeCreate GORM hook
-func (a *Attribute) BeforeCreate(tx interface{}) error {
+func (a *Attribute) BeforeCreate(tx *gorm.DB) error {
 	return a.ValidateDataType()
 }
 
 // BeforeUpdate GORM hook
-func (a *Attribute) BeforeUpdate(tx interface{}) error {
+func (a *Attribute) BeforeUpdate(tx *gorm.DB) error {
 	return a.ValidateDataType()
 }
 
