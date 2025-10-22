@@ -10,6 +10,7 @@ import (
 
 	"github.com/Wilson1510/klampis-pim-go/internal/config"
 	"github.com/Wilson1510/klampis-pim-go/internal/models"
+	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -25,6 +26,16 @@ import (
 //   TEST_DB_NAME - optional, defaults to klampis_pim_test
 func SetupTestDB(t *testing.T) *gorm.DB {
 	t.Helper()
+
+	// Load .env file from project root (../../.env from internal/testutil)
+	err := godotenv.Load("../../.env")
+	if err != nil {
+		// If loading from relative path fails, try current directory
+		err = godotenv.Load()
+		if err != nil {
+			t.Logf("Warning: Failed to load .env file: %v. Using environment variables or defaults.", err)
+		}
+	}
 
 	// Get base configuration
 	baseConfig := getBaseDBConfig()
@@ -180,7 +191,7 @@ func getBaseDBConfig() *config.DatabaseConfig {
 		Host:     getEnvOrDefault("DB_HOST", "localhost"),
 		Port:     getEnvIntOrDefault("DB_PORT", 5432),
 		User:     getEnvOrDefault("DB_USER", "postgres"),
-		Password: getEnvOrDefault("DB_PASSWORD", "sofia"),
+		Password: getEnvOrDefault("DB_PASSWORD", "postgres"),
 		Name:     "postgres", // Always connect to postgres database for admin operations
 	}
 }
