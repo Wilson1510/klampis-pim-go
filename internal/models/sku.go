@@ -19,6 +19,9 @@ type Sku struct {
 
 	// Polymorphic relationship with Images
 	Images []Image `gorm:"polymorphic:Imageable;polymorphicValue:skus" json:"images,omitempty"`
+
+	// Relationship with SKU Attribute Values
+	AttributeValues []SkuAttributeValue `gorm:"foreignKey:SkuID" json:"attribute_values,omitempty"`
 }
 
 // BeforeCreate is a GORM hook that runs before creating a record
