@@ -1,8 +1,8 @@
 package models
 
 import (
-	"gorm.io/gorm"
 	"github.com/Wilson1510/klampis-pim-go/pkg/utils"
+	"gorm.io/gorm"
 )
 
 type Sku struct {
@@ -13,10 +13,10 @@ type Sku struct {
 	SkuNumber   string  `gorm:"uniqueIndex;not null;type:varchar(50)" json:"sku_number"`
 	Price       float64 `gorm:"not null;type:decimal(15,2)" json:"price"`
 	ProductID   uint    `gorm:"not null;index" json:"product_id"`
-	
+
 	// Relationship with Product
 	Product *Product `gorm:"foreignKey:ProductID" json:"product,omitempty"`
-	
+
 	// Polymorphic relationship with Images
 	Images []Image `gorm:"polymorphic:Imageable;polymorphicValue:skus" json:"images,omitempty"`
 }

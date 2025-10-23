@@ -18,11 +18,11 @@ func (m *MockDBForSkuAttr) First(dest interface{}, conds ...interface{}) *MockDB
 	if m.firstError != nil {
 		return &MockDBForSkuAttr{firstError: m.firstError}
 	}
-	
+
 	if attr, ok := dest.(*Attribute); ok && m.attribute != nil {
 		*attr = *m.attribute
 	}
-	
+
 	return &MockDBForSkuAttr{}
 }
 
@@ -535,12 +535,12 @@ func (sav *SkuAttributeValue) testValidateValue(mockDB *MockDBForSkuAttr) error 
 	if err := mockDB.First(&attribute, sav.AttributeID).Error(); err != nil {
 		return errors.New("attribute not found: " + err.Error())
 	}
-	
+
 	// Validate value according to attribute's data type
 	if err := attribute.ValidateValue(sav.Value); err != nil {
 		return errors.New("invalid value for attribute '" + attribute.Name + "': " + err.Error())
 	}
-	
+
 	return nil
 }
 
@@ -550,7 +550,7 @@ func (sav *SkuAttributeValue) testGetParsedValue(mockDB *MockDBForSkuAttr) (inte
 	if err := mockDB.First(&attribute, sav.AttributeID).Error(); err != nil {
 		return nil, errors.New("attribute not found: " + err.Error())
 	}
-	
+
 	return attribute.ParseValue(sav.Value)
 }
 
@@ -560,12 +560,12 @@ func (sav *SkuAttributeValue) testSetValue(value interface{}, mockDB *MockDBForS
 	if err := mockDB.First(&attribute, sav.AttributeID).Error(); err != nil {
 		return errors.New("attribute not found: " + err.Error())
 	}
-	
+
 	valueStr, err := attribute.FormatValue(value)
 	if err != nil {
 		return err
 	}
-	
+
 	sav.Value = valueStr
 	return nil
 }
@@ -573,7 +573,7 @@ func (sav *SkuAttributeValue) testSetValue(value interface{}, mockDB *MockDBForS
 // testGetDisplayValue is a test wrapper for GetDisplayValue (hybrid approach)
 func (sav *SkuAttributeValue) testGetDisplayValue(mockDB *MockDBForSkuAttr) (string, error) {
 	var attribute Attribute
-	
+
 	// Check if Attribute is already preloaded
 	if sav.Attribute != nil {
 		attribute = *sav.Attribute
@@ -583,12 +583,12 @@ func (sav *SkuAttributeValue) testGetDisplayValue(mockDB *MockDBForSkuAttr) (str
 			return "", errors.New("attribute not found: " + err.Error())
 		}
 	}
-	
+
 	// Format display value with UOM if available
 	if attribute.UOM != "" {
 		return fmt.Sprintf("%s %s", sav.Value, attribute.UOM), nil
 	}
-	
+
 	return sav.Value, nil
 }
 

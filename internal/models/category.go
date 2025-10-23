@@ -1,8 +1,8 @@
 package models
 
 import (
-	"gorm.io/gorm"
 	"github.com/Wilson1510/klampis-pim-go/pkg/utils"
+	"gorm.io/gorm"
 )
 
 type Category struct {
@@ -11,11 +11,11 @@ type Category struct {
 	Slug        string `gorm:"uniqueIndex;not null;type:varchar(120)" json:"slug"`
 	Description string `gorm:"type:text" json:"description"`
 	ParentID    *uint  `gorm:"index" json:"parent_id"`
-	
+
 	// Self-referencing relationships
-	Parent   *Category   `gorm:"foreignKey:ParentID" json:"parent,omitempty"`
-	Children []Category  `gorm:"foreignKey:ParentID" json:"children,omitempty"`
-	
+	Parent   *Category  `gorm:"foreignKey:ParentID" json:"parent,omitempty"`
+	Children []Category `gorm:"foreignKey:ParentID" json:"children,omitempty"`
+
 	// Relationship with Products
 	Products []Product `gorm:"foreignKey:CategoryID" json:"products,omitempty"`
 }

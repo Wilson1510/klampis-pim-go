@@ -13,10 +13,10 @@ type MockSlugModel struct {
 	tableName string
 }
 
-func (m *MockSlugModel) GetName() string     { return m.name }
-func (m *MockSlugModel) GetSlug() string     { return m.slug }
-func (m *MockSlugModel) SetSlug(slug string) { m.slug = slug }
-func (m *MockSlugModel) GetID() uint         { return m.id }
+func (m *MockSlugModel) GetName() string      { return m.name }
+func (m *MockSlugModel) GetSlug() string      { return m.slug }
+func (m *MockSlugModel) SetSlug(slug string)  { m.slug = slug }
+func (m *MockSlugModel) GetID() uint          { return m.id }
 func (m *MockSlugModel) GetTableName() string { return m.tableName }
 
 // MockDB implements database interface for testing
@@ -27,15 +27,15 @@ type MockDB struct {
 	firstError  error
 }
 
-func (m *MockDB) Table(name string) *MockDB { return m }
+func (m *MockDB) Table(name string) *MockDB                             { return m }
 func (m *MockDB) Select(query interface{}, args ...interface{}) *MockDB { return m }
-func (m *MockDB) Where(query interface{}, args ...interface{}) *MockDB { return m }
+func (m *MockDB) Where(query interface{}, args ...interface{}) *MockDB  { return m }
 
 func (m *MockDB) Find(dest interface{}) *MockDB {
 	if m.findError != nil {
 		return &MockDB{findError: m.findError}
 	}
-	
+
 	// Handle different struct types that might be passed to Find()
 	switch v := dest.(type) {
 	case *[]struct{ Slug string }:
@@ -57,7 +57,7 @@ func (m *MockDB) Find(dest interface{}) *MockDB {
 			}
 		}
 	}
-	
+
 	return m
 }
 
@@ -65,7 +65,7 @@ func (m *MockDB) First(dest interface{}) *MockDB {
 	if m.firstError != nil {
 		return &MockDB{firstError: m.firstError}
 	}
-	
+
 	// Handle different struct types that might be passed to First()
 	switch v := dest.(type) {
 	case *struct{ Name string }:
@@ -83,7 +83,7 @@ func (m *MockDB) First(dest interface{}) *MockDB {
 			}
 		}
 	}
-	
+
 	return m
 }
 
@@ -167,7 +167,7 @@ func TestShouldRegenerateModelSlug(t *testing.T) {
 
 			// Assert result
 			if result != tc.expectedResult {
-				t.Errorf("Expected ShouldRegenerateModelSlug() to return %v, but got %v. %s", 
+				t.Errorf("Expected ShouldRegenerateModelSlug() to return %v, but got %v. %s",
 					tc.expectedResult, result, tc.description)
 			}
 		})
@@ -286,13 +286,13 @@ func TestGenerateModelSlug(t *testing.T) {
 			// Assert slug generation
 			if tc.shouldCallUtils {
 				if tc.model.GetSlug() != tc.expectedSlug {
-					t.Errorf("Expected slug '%s', but got '%s'. %s", 
+					t.Errorf("Expected slug '%s', but got '%s'. %s",
 						tc.expectedSlug, tc.model.GetSlug(), tc.description)
 				}
 			} else {
 				// For cases where utils shouldn't be called (empty name)
 				if tc.model.GetName() == "" && tc.model.GetSlug() != "" {
-					t.Errorf("Expected slug to remain empty when name is empty, but got '%s'", 
+					t.Errorf("Expected slug to remain empty when name is empty, but got '%s'",
 						tc.model.GetSlug())
 				}
 			}
@@ -307,21 +307,21 @@ func shouldRegenerateModelSlugWithMock(model SlugModel, mockDB *MockDB) bool {
 	if model.GetID() == 0 {
 		return true // New record
 	}
-	
+
 	// For updates, check if name has changed
 	var result struct {
 		Name string `json:"name"`
 	}
-	
+
 	err := mockDB.Table(model.GetTableName()).
 		Select("name").
 		Where("id = ?", model.GetID()).
 		First(&result).Error()
-		
+
 	if err != nil {
 		return true // If we can't find original, regenerate
 	}
-	
+
 	return result.Name != model.GetName()
 }
 
@@ -333,18 +333,18 @@ func generateModelSlugWithMock(model SlugModel, mockDB *MockDB) error {
 		if baseSlug == "" {
 			return nil // Skip if name is empty
 		}
-		
+
 		// Check for existing slugs to ensure uniqueness
 		existingSlugs, err := getExistingSlugsWithMock(model, mockDB)
 		if err != nil {
 			return err
 		}
-		
+
 		// Generate unique slug
 		uniqueSlug := GenerateUniqueSlug(baseSlug, existingSlugs)
 		model.SetSlug(uniqueSlug)
 	}
-	
+
 	return nil
 }
 
@@ -353,21 +353,21 @@ func getExistingSlugsWithMock(model SlugModel, mockDB *MockDB) ([]string, error)
 	var results []struct {
 		Slug string `json:"slug"`
 	}
-	
+
 	query := mockDB.Table(model.GetTableName()).Select("slug")
 	if model.GetID() != 0 {
 		query = query.Where("id != ?", model.GetID())
 	}
-	
+
 	if err := query.Find(&results).Error(); err != nil {
 		return nil, err
 	}
-	
+
 	var slugs []string
 	for _, result := range results {
 		slugs = append(slugs, result.Slug)
 	}
-	
+
 	return slugs, nil
 }
 
@@ -384,19 +384,19 @@ func TestSlugModelInterface(t *testing.T) {
 	if model.GetID() != 1 {
 		t.Errorf("Expected ID 1, got %d", model.GetID())
 	}
-	
+
 	if model.GetName() != "Test Model" {
 		t.Errorf("Expected name 'Test Model', got '%s'", model.GetName())
 	}
-	
+
 	if model.GetSlug() != "test-model" {
 		t.Errorf("Expected slug 'test-model', got '%s'", model.GetSlug())
 	}
-	
+
 	if model.GetTableName() != "test_models" {
 		t.Errorf("Expected table name 'test_models', got '%s'", model.GetTableName())
 	}
-	
+
 	// Test SetSlug
 	model.SetSlug("new-slug")
 	if model.GetSlug() != "new-slug" {

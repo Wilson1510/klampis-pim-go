@@ -434,4 +434,3 @@ func TestUserValidation_Integration(t *testing.T) {
 		}
 	})
 }
-

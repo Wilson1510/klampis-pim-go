@@ -21,18 +21,18 @@ func GenerateModelSlug(model SlugModel, tx *gorm.DB) error {
 		if baseSlug == "" {
 			return nil // Skip if name is empty
 		}
-		
+
 		// Check for existing slugs to ensure uniqueness
 		existingSlugs, err := getExistingSlugs(model, tx)
 		if err != nil {
 			return err
 		}
-		
+
 		// Generate unique slug
 		uniqueSlug := GenerateUniqueSlug(baseSlug, existingSlugs)
 		model.SetSlug(uniqueSlug)
 	}
-	
+
 	return nil
 }
 
@@ -41,21 +41,21 @@ func ShouldRegenerateModelSlug(model SlugModel, tx *gorm.DB) bool {
 	if model.GetID() == 0 {
 		return true // New record
 	}
-	
+
 	// For updates, check if name has changed
 	var result struct {
 		Name string `json:"name"`
 	}
-	
+
 	err := tx.Table(model.GetTableName()).
 		Select("name").
 		Where("id = ?", model.GetID()).
 		First(&result).Error
-		
+
 	if err != nil {
 		return true // If we can't find original, regenerate
 	}
-	
+
 	return result.Name != model.GetName()
 }
 
@@ -64,20 +64,20 @@ func getExistingSlugs(model SlugModel, tx *gorm.DB) ([]string, error) {
 	var results []struct {
 		Slug string `json:"slug"`
 	}
-	
+
 	query := tx.Table(model.GetTableName()).Select("slug")
 	if model.GetID() != 0 {
 		query = query.Where("id != ?", model.GetID())
 	}
-	
+
 	if err := query.Find(&results).Error; err != nil {
 		return nil, err
 	}
-	
+
 	var slugs []string
 	for _, result := range results {
 		slugs = append(slugs, result.Slug)
 	}
-	
+
 	return slugs, nil
 }

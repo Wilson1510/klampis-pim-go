@@ -9,8 +9,8 @@ type UserRole string
 
 const (
 	RoleSystem UserRole = "SYSTEM"
-    RoleAdmin  UserRole = "ADMIN"
-    RoleUser   UserRole = "USER"
+	RoleAdmin  UserRole = "ADMIN"
+	RoleUser   UserRole = "USER"
 )
 
 type User struct {
@@ -34,12 +34,12 @@ func (u *User) BeforeUpdate(tx *gorm.DB) error {
 // validateRole checks if the role is valid
 func (u *User) validateRole() error {
 	validRoles := []UserRole{RoleSystem, RoleAdmin, RoleUser}
-	
+
 	for _, validRole := range validRoles {
 		if u.Role == validRole {
 			return nil
 		}
 	}
-	
+
 	return fmt.Errorf("invalid role: %s. Valid roles are: %v", u.Role, validRoles)
 }

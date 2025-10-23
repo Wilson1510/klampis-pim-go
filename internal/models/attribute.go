@@ -25,7 +25,7 @@ type Attribute struct {
 	Code     string   `gorm:"uniqueIndex;not null;type:varchar(70)" json:"code"`
 	DataType DataType `gorm:"not null;type:varchar(20)" json:"data_type"`
 	UOM      string   `gorm:"type:varchar(15)" json:"uom"` // Unit of measurement: GB, inch, GHz, years, etc.
-	
+
 	// Relationships
 	SkuAttributeValues []SkuAttributeValue `gorm:"foreignKey:AttributeID" json:"sku_attribute_values,omitempty"`
 }
@@ -33,13 +33,13 @@ type Attribute struct {
 // ValidateDataType validates if the data type is valid
 func (a *Attribute) ValidateDataType() error {
 	validTypes := []DataType{DataTypeText, DataTypeNumber, DataTypeBoolean, DataTypeDate}
-	
+
 	for _, validType := range validTypes {
 		if a.DataType == validType {
 			return nil
 		}
 	}
-	
+
 	return fmt.Errorf("invalid data type: %s. Valid types are: %v", a.DataType, validTypes)
 }
 
@@ -65,23 +65,23 @@ func (a *Attribute) ParseValue(valueStr string) (interface{}, error) {
 	switch a.DataType {
 	case DataTypeText:
 		return valueStr, nil
-		
+
 	case DataTypeNumber:
 		return strconv.ParseFloat(valueStr, 64)
-		
+
 	case DataTypeBoolean:
 		return strconv.ParseBool(valueStr)
-		
+
 	case DataTypeDate:
 		// Try multiple date formats
 		formats := []string{
-			"2006-01-02",                // ISO date: 2023-12-31
-			"2006-01-02 15:04:05",       // ISO datetime: 2023-12-31 23:59:59
-			time.RFC3339,                 // RFC3339: 2023-12-31T23:59:59Z
-			"02/01/2006",                 // DD/MM/YYYY: 31/12/2023
-			"01/02/2006",                 // MM/DD/YYYY: 12/31/2023
+			"2006-01-02",          // ISO date: 2023-12-31
+			"2006-01-02 15:04:05", // ISO datetime: 2023-12-31 23:59:59
+			time.RFC3339,          // RFC3339: 2023-12-31T23:59:59Z
+			"02/01/2006",          // DD/MM/YYYY: 31/12/2023
+			"01/02/2006",          // MM/DD/YYYY: 12/31/2023
 		}
-		
+
 		var lastErr error
 		for _, format := range formats {
 			if t, err := time.Parse(format, valueStr); err == nil {
@@ -91,7 +91,7 @@ func (a *Attribute) ParseValue(valueStr string) (interface{}, error) {
 			}
 		}
 		return nil, fmt.Errorf("invalid date format: %w", lastErr)
-		
+
 	default:
 		return nil, fmt.Errorf("unsupported data type: %s", a.DataType)
 	}
@@ -105,7 +105,7 @@ func (a *Attribute) FormatValue(value interface{}) (string, error) {
 			return str, nil
 		}
 		return fmt.Sprintf("%v", value), nil
-		
+
 	case DataTypeNumber:
 		switch v := value.(type) {
 		case int:
@@ -121,13 +121,13 @@ func (a *Attribute) FormatValue(value interface{}) (string, error) {
 		default:
 			return "", fmt.Errorf("invalid number value: %v", value)
 		}
-		
+
 	case DataTypeBoolean:
 		if b, ok := value.(bool); ok {
 			return strconv.FormatBool(b), nil
 		}
 		return "", fmt.Errorf("invalid boolean value: %v", value)
-		
+
 	case DataTypeDate:
 		switch v := value.(type) {
 		case time.Time:
@@ -141,7 +141,7 @@ func (a *Attribute) FormatValue(value interface{}) (string, error) {
 		default:
 			return "", fmt.Errorf("invalid date value: %v", value)
 		}
-		
+
 	default:
 		return "", fmt.Errorf("unsupported data type: %s", a.DataType)
 	}

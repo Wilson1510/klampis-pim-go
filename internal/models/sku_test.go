@@ -17,19 +17,19 @@ func TestSkuSlugModelInterface(t *testing.T) {
 	if sku.GetID() != 1 {
 		t.Errorf("Expected ID 1, got %d", sku.GetID())
 	}
-	
+
 	if sku.GetName() != "Test SKU" {
 		t.Errorf("Expected name 'Test SKU', got '%s'", sku.GetName())
 	}
-	
+
 	if sku.GetSlug() != "test-sku" {
 		t.Errorf("Expected slug 'test-sku', got '%s'", sku.GetSlug())
 	}
-	
+
 	if sku.GetTableName() != "skus" {
 		t.Errorf("Expected table name 'skus', got '%s'", sku.GetTableName())
 	}
-	
+
 	// Test SetSlug
 	sku.SetSlug("new-sku-slug")
 	if sku.GetSlug() != "new-sku-slug" {

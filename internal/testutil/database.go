@@ -22,8 +22,9 @@ import (
 // but creates a separate database for testing (default: klampis_pim_test)
 //
 // Environment variables:
-//   DB_HOST, DB_PORT, DB_USER, DB_PASSWORD - same as main app (from .env)
-//   TEST_DB_NAME - optional, defaults to klampis_pim_test
+//
+//	DB_HOST, DB_PORT, DB_USER, DB_PASSWORD - same as main app (from .env)
+//	TEST_DB_NAME - optional, defaults to klampis_pim_test
 func SetupTestDB(t *testing.T) *gorm.DB {
 	t.Helper()
 
@@ -221,4 +222,3 @@ func getEnvIntOrDefault(key string, defaultValue int) int {
 	}
 	return defaultValue
 }
-

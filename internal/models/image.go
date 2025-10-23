@@ -23,7 +23,7 @@ func (i *Image) BeforeCreate(tx *gorm.DB) error {
 	if i.IsPrimary {
 		// Set other images of the same imageable to non-primary
 		return tx.Model(&Image{}).
-			Where("imageable_id = ? AND imageable_type = ? AND is_primary = ?", 
+			Where("imageable_id = ? AND imageable_type = ? AND is_primary = ?",
 				i.ImageableID, i.ImageableType, true).
 			Update("is_primary", false).Error
 	}
@@ -35,10 +35,9 @@ func (i *Image) BeforeUpdate(tx *gorm.DB) error {
 	if i.IsPrimary {
 		// Set other images of the same imageable to non-primary
 		return tx.Model(&Image{}).
-			Where("imageable_id = ? AND imageable_type = ? AND id != ? AND is_primary = ?", 
+			Where("imageable_id = ? AND imageable_type = ? AND id != ? AND is_primary = ?",
 				i.ImageableID, i.ImageableType, i.ID, true).
 			Update("is_primary", false).Error
 	}
 	return nil
 }
-

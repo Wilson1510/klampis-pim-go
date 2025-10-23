@@ -17,19 +17,19 @@ func TestProductSlugModelInterface(t *testing.T) {
 	if product.GetID() != 1 {
 		t.Errorf("Expected ID 1, got %d", product.GetID())
 	}
-	
+
 	if product.GetName() != "Test Product" {
 		t.Errorf("Expected name 'Test Product', got '%s'", product.GetName())
 	}
-	
+
 	if product.GetSlug() != "test-product" {
 		t.Errorf("Expected slug 'test-product', got '%s'", product.GetSlug())
 	}
-	
+
 	if product.GetTableName() != "products" {
 		t.Errorf("Expected table name 'products', got '%s'", product.GetTableName())
 	}
-	
+
 	// Test SetSlug
 	product.SetSlug("new-product-slug")
 	if product.GetSlug() != "new-product-slug" {

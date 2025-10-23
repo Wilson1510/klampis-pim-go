@@ -17,19 +17,19 @@ func TestCategorySlugModelInterface(t *testing.T) {
 	if category.GetID() != 1 {
 		t.Errorf("Expected ID 1, got %d", category.GetID())
 	}
-	
+
 	if category.GetName() != "Test Category" {
 		t.Errorf("Expected name 'Test Category', got '%s'", category.GetName())
 	}
-	
+
 	if category.GetSlug() != "test-category" {
 		t.Errorf("Expected slug 'test-category', got '%s'", category.GetSlug())
 	}
-	
+
 	if category.GetTableName() != "categories" {
 		t.Errorf("Expected table name 'categories', got '%s'", category.GetTableName())
 	}
-	
+
 	// Test SetSlug
 	category.SetSlug("new-category-slug")
 	if category.GetSlug() != "new-category-slug" {

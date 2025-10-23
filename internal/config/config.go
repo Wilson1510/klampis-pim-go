@@ -1,35 +1,35 @@
 package config
 
 import (
+	"github.com/joho/godotenv"
 	"os"
-	"time"
 	"strconv"
 	"strings"
-	"github.com/joho/godotenv"
+	"time"
 )
 
 type Config struct {
-	App AppConfig
+	App      AppConfig
 	Database DatabaseConfig
-	JWT JWTConfig
+	JWT      JWTConfig
 }
 
 type AppConfig struct {
-	Name string
-	Port int
+	Name  string
+	Port  int
 	Debug bool
 }
 
 type DatabaseConfig struct {
-	Host string
-	Port int
-	User string
+	Host     string
+	Port     int
+	User     string
 	Password string
-	Name string
+	Name     string
 }
 
 type JWTConfig struct {
-	Secret string
+	Secret            string
 	AccessTokenExpiry time.Duration
 }
 
@@ -53,19 +53,19 @@ func LoadConfig() (*Config, error) {
 
 	config := &Config{
 		App: AppConfig{
-			Name: os.Getenv("APP_NAME"),
-			Port: getEnvInt("APP_PORT"),
+			Name:  os.Getenv("APP_NAME"),
+			Port:  getEnvInt("APP_PORT"),
 			Debug: getEnvBool("APP_DEBUG"),
 		},
 		Database: DatabaseConfig{
-			Host: os.Getenv("DB_HOST"),
-			Port: getEnvInt("DB_PORT"),
-			User: os.Getenv("DB_USER"),
+			Host:     os.Getenv("DB_HOST"),
+			Port:     getEnvInt("DB_PORT"),
+			User:     os.Getenv("DB_USER"),
 			Password: os.Getenv("DB_PASSWORD"),
-			Name: os.Getenv("DB_NAME"),
+			Name:     os.Getenv("DB_NAME"),
 		},
 		JWT: JWTConfig{
-			Secret: os.Getenv("JWT_SECRET"),
+			Secret:            os.Getenv("JWT_SECRET"),
 			AccessTokenExpiry: time.Duration(getEnvInt("JWT_ACCESS_TOKEN_EXPIRY")) * time.Second,
 		},
 	}

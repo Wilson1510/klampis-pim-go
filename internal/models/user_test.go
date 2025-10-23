@@ -69,7 +69,7 @@ func TestValidateRole(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			// Create user with the test role
 			user := User{Role: tc.role}
-			
+
 			// Call validateRole method
 			err := user.validateRole()
 

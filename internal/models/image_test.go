@@ -11,5 +11,3 @@ func TestImageTableName(t *testing.T) {
 		t.Errorf("Expected table name 'images', got '%s'", image.TableName())
 	}
 }
-
-

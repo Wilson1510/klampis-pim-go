@@ -1,12 +1,12 @@
 package utils
 
 import (
+	"golang.org/x/text/transform"
+	"golang.org/x/text/unicode/norm"
 	"regexp"
 	"strconv"
 	"strings"
 	"unicode"
-	"golang.org/x/text/transform"
-	"golang.org/x/text/unicode/norm"
 )
 
 // GenerateSlug creates a URL-friendly slug from the given text
@@ -17,20 +17,20 @@ func GenerateSlug(text string) string {
 
 	// Convert to lowercase
 	slug := strings.ToLower(text)
-	
+
 	// Remove accents and normalize unicode
 	t := transform.Chain(norm.NFD, transform.RemoveFunc(isMn), norm.NFC)
 	slug, _, _ = transform.String(t, slug)
-	
+
 	// Replace spaces and special characters with hyphens
 	slug = regexp.MustCompile(`[^a-z0-9]+`).ReplaceAllString(slug, "-")
-	
+
 	// Remove leading and trailing hyphens
 	slug = strings.Trim(slug, "-")
-	
+
 	// Replace multiple consecutive hyphens with single hyphen
 	slug = regexp.MustCompile(`-+`).ReplaceAllString(slug, "-")
-	
+
 	return slug
 }
 
@@ -44,28 +44,28 @@ func GenerateUniqueSlug(baseSlug string, existingSlugs []string) string {
 	if baseSlug == "" {
 		return ""
 	}
-	
+
 	// Check if base slug is unique
 	if !contains(existingSlugs, baseSlug) {
 		return baseSlug
 	}
-	
+
 	// If not unique, append numbers until we find a unique one
 	counter := 1
 	for {
 		candidateSlug := baseSlug + "-" + strconv.Itoa(counter)
-		
+
 		if !contains(existingSlugs, candidateSlug) {
 			return candidateSlug
 		}
 		counter++
-		
+
 		// Safety check to prevent infinite loop
 		if counter > 1000 {
 			break
 		}
 	}
-	
+
 	return baseSlug
 }
 
